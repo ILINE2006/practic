@@ -1,0 +1,14 @@
+{
+    "name": "iline/pop-it-mvc",
+    "description": "Simple mvc framework",
+    "type": "project",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "ILINE2006",
+            "email": "teplotom71@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {}
+}
