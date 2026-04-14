@@ -3,7 +3,7 @@
         'name' => 'iline/pop-it-mvc',
         'pretty_version' => 'dev-master',
         'version' => 'dev-master',
-        'reference' => 'b82f6b2a637d6a2aba81513997ed0e42059f2921',
+        'reference' => '90784f3351ee26581f391bb926c6c9d2b90eed3c',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -42,7 +42,7 @@
         'iline/pop-it-mvc' => array(
             'pretty_version' => 'dev-master',
             'version' => 'dev-master',
-            'reference' => 'b82f6b2a637d6a2aba81513997ed0e42059f2921',
+            'reference' => '90784f3351ee26581f391bb926c6c9d2b90eed3c',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
@@ -167,6 +167,17 @@
             ),
             'dev_requirement' => false,
         ),
+        'nikic/fast-route' => array(
+            'pretty_version' => 'dev-master',
+            'version' => 'dev-master',
+            'reference' => '1c961398bef1ff6ecd8b273bef651d7afe90312b',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../nikic/fast-route',
+            'aliases' => array(
+                0 => '2.0.x-dev',
+            ),
+            'dev_requirement' => false,
+        ),
         'psr/clock' => array(
             'pretty_version' => '1.0.0',
             'version' => '1.0.0.0',
@@ -198,6 +209,17 @@
             'provided' => array(
                 0 => '1.1|2.0',
             ),
+        ),
+        'psr/http-message' => array(
+            'pretty_version' => 'dev-master',
+            'version' => 'dev-master',
+            'reference' => '402d35bcb92c70c026d1a6a9883f06b2ead23d71',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../psr/http-message',
+            'aliases' => array(
+                0 => '2.0.x-dev',
+            ),
+            'dev_requirement' => false,
         ),
         'psr/simple-cache' => array(
             'pretty_version' => 'dev-master',
