@@ -93,6 +93,7 @@
     <div class="message"><?= $message ?? ''; ?></div>
 
     <form method="post">
+    <input name="csrf_token" type="hidden" value="<?= app()->auth::generateCSRF() ?>"/>
         <div class="form-grid">
             <div class="form-group">
                 <label>Название подразделения</label>

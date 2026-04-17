@@ -22,7 +22,7 @@ $this->body[$field] = $value;
 }
 public function get($field)
 {
-return $this->body[$field];
+  return $this->body[$field] ?? null;
 }
 public function files(): array
 {

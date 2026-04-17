@@ -54,6 +54,7 @@
     <div class="message"><?= $message ?? ''; ?></div>
     
     <form method="post">
+    <input name="csrf_token" type="hidden" value="<?= app()->auth::generateCSRF() ?>"/>
         <label>Имя 
             <input type="text" name="name" required placeholder="ФИО специалиста">
         </label>
