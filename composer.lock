@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1ebea1dda8078fa596f7212da42b81ac",
+    "content-hash": "f9847699f3e1bbec9bb92d6344c69028",
     "packages": [
         {
             "name": "brick/math",
@@ -230,6 +230,40 @@
                 }
             ],
             "time": "2026-01-18T09:59:11+00:00"
+        },
+        {
+            "name": "iline/collect",
+            "version": "dev-main",
+            "dist": {
+                "type": "path",
+                "url": "C:/xampp/htdocs/collect",
+                "reference": "4e5882fe2315eb83209870a187dd0599a51ae98a"
+            },
+            "require": {
+                "php": "^7.4 | ^8.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Collect\\": "src/"
+                },
+                "files": [
+                    "src/helpers.php"
+                ]
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "ILINE2006",
+                    "email": "teplotom71@gmail.com"
+                }
+            ],
+            "description": "Module for working with arrays",
+            "transport-options": {
+                "relative": false
+            }
         },
         {
             "name": "illuminate/bus",
@@ -2041,6 +2075,7 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
+        "iline/collect": 20,
         "illuminate/database": 20,
         "illuminate/events": 20,
         "nikic/fast-route": 20

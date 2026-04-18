@@ -14,8 +14,15 @@
         "php": "^8.0",
         "illuminate/database": "12.x-dev",
         "illuminate/events": "12.x-dev",
-        "nikic/fast-route": "^2.0@dev"
+        "nikic/fast-route": "^2.0@dev",
+        "iline/collect": "dev-main"
     },
+    "repositories": [
+        {
+            "type": "path",
+            "url": "C:/xampp/htdocs/collect"
+        }
+    ],
     "config": {
         "platform-check": false
     },

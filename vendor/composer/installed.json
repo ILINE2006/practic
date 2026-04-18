@@ -235,6 +235,43 @@
             "install-path": "../doctrine/inflector"
         },
         {
+            "name": "iline/collect",
+            "version": "dev-main",
+            "version_normalized": "dev-main",
+            "dist": {
+                "type": "path",
+                "url": "C:/xampp/htdocs/collect",
+                "reference": "4e5882fe2315eb83209870a187dd0599a51ae98a"
+            },
+            "require": {
+                "php": "^7.4 | ^8.0"
+            },
+            "type": "library",
+            "installation-source": "dist",
+            "autoload": {
+                "psr-4": {
+                    "Collect\\": "src/"
+                },
+                "files": [
+                    "src/helpers.php"
+                ]
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "ILINE2006",
+                    "email": "teplotom71@gmail.com"
+                }
+            ],
+            "description": "Module for working with arrays",
+            "transport-options": {
+                "relative": false
+            },
+            "install-path": "../iline/collect"
+        },
+        {
             "name": "illuminate/bus",
             "version": "12.x-dev",
             "version_normalized": "12.9999999.9999999.9999999-dev",
