@@ -31,7 +31,9 @@ class Hr
     $employees = $query->get();
     $departments = \Model\Department::all();
 
+
     if ($request->method === 'POST') {
+
         $validator = new \Src\Validator\Validator($request->all(), [
             'last_name' => ['required', 'name'],
             'first_name' => ['required', 'name'],
@@ -51,18 +53,28 @@ class Hr
         }
 
         $data = $request->all();
+        
+        unset($data['avatar']);
 
-        if (!empty($request->files()['avatar']['name'])) {
-            $file = $request->files()['avatar'];
+        $file = $request->files()['avatar'] ?? null;
+        if ($file && $file['error'] === UPLOAD_ERR_OK) {
+            
+            $uploadDir = __DIR__ . '/../../public/uploads/';
+            
+            if (!is_dir($uploadDir)) {
+                mkdir($uploadDir, 0777, true);
+            }
+
             $extension = pathinfo($file['name'], PATHINFO_EXTENSION);
             $filename = uniqid() . '.' . $extension;
-            $targetPath = $_SERVER['DOCUMENT_ROOT'] . '/pop-it-mvc/public/uploads/' . $filename;
+            $targetPath = $uploadDir . $filename;
             
             if (move_uploaded_file($file['tmp_name'], $targetPath)) {
                 $data['avatar'] = '/pop-it-mvc/public/uploads/' . $filename;
             }
         }
 
+        
         if (\Model\Employee::create($data)) {
             app()->route->redirect('/hr/employees');
         }

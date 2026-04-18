@@ -63,7 +63,13 @@
         margin-top: 20px;
     }
     
-
+    .employee-photo {
+        width: 50px;          
+        height: 50px;         
+        object-fit: cover;   
+        border-radius: 50%;   
+        border: 1px solid #ddd; 
+    }
 
     .mockup-table {
         width: 100%;
