@@ -85,29 +85,37 @@
 <div class="mockup-content">
     <h2>Управление сотрудниками</h2>
 
-    <form method="post">
-    <input name="csrf_token" type="hidden" value="<?= app()->auth::generateCSRF() ?>"/>
+    <div class="search-box">
+        <form method="get">
+            <div style="display: flex; gap: 10px;">
+                <input type="text" name="search" class="form-control" placeholder="Поиск по фамилии..." value="<?= $search ?? '' ?>">
+                <button type="submit" class="btn-green" style="margin-top:0">Найти</button>
+                <a href="<?= app()->route->getUrl('/hr/employees') ?>" style="line-height: 40px; text-decoration: none; color: #666;">Сбросить</a>
+            </div>
+        </form>
+    </div>
+
+    <div class="message" style="color: red;"><?= $message ?? ''; ?></div>
+
+    <form method="post" enctype="multipart/form-data">
+        <input name="csrf_token" type="hidden" value="<?= app()->auth::generateCSRF() ?>"/>
         <div class="form-grid">
             <div class="form-group">
-                <label>Фамилия</label>
+                <label>Фамилия (без цифр)</label>
                 <input type="text" name="last_name" class="form-control" required>
             </div>
-            
             <div class="form-group">
-                <label>Имя</label>
+                <label>Имя (без цифр)</label>
                 <input type="text" name="first_name" class="form-control" required>
             </div>
-            
-            <div class="form-group">
-                <label>Отчество</label>
-                <input type="text" name="middle_name" class="form-control">
-            </div>
-
             <div class="form-group">
                 <label>Дата рождения</label>
                 <input type="date" name="birth_date" class="form-control" required>
             </div>
-            
+            <div class="form-group">
+                <label>Фото (Загрузка файла)</label>
+                <input type="file" name="avatar" class="form-control" accept="image/*">
+            </div>
             <div class="form-group">
                 <label>Пол</label>
                 <select name="gender" class="form-control">
@@ -115,12 +123,10 @@
                     <option>Женский</option>
                 </select>
             </div>
-            
             <div class="form-group">
                 <label>Должность</label>
                 <input type="text" name="position" class="form-control" required>
             </div>
-            
             <div class="form-group">
                 <label>Подразделение</label>
                 <select name="department_id" class="form-control" required>
@@ -129,51 +135,49 @@
                     <?php endforeach; ?>
                 </select>
             </div>
-            
             <div class="form-group">
                 <label>Состав</label>
                 <select name="employee_type" class="form-control">
-                    <option value="ППС">Профессорско-преподавательский состав (ППС)</option>
-                    <option value="УВП">Учебно-вспомогательный персонал (УВП)</option>
-                    <option value="АХЧ">Административно-хозяйственная часть (АХЧ)</option>
+                    <option value="ППС">ППС</option>
+                    <option value="УВП">УВП</option>
+                    <option value="АХЧ">АХЧ</option>
                 </select>
             </div>
-
             <div class="form-group full-width">
                 <label>Адрес прописки</label>
                 <input type="text" name="address" class="form-control" required>
             </div>
         </div>
-
-        <button type="submit" class="btn-green">
-            <i class="fa-solid fa-check"></i> Сохранить сотрудника
-        </button>
+        <button type="submit" class="btn-green">Сохранить сотрудника</button>
     </form>
 
-    <hr class="mockup-divider">
+    <hr style="margin: 30px 0; border: 0; border-top: 1px solid #eee;">
 
     <h3>Список сотрудников</h3>
     <table class="mockup-table">
         <thead>
             <tr>
+                <th>Фото</th>
                 <th>ФИО</th>
                 <th>Должность</th>
-                <th>Состав</th>
+                <th>Подразделение</th>
             </tr>
         </thead>
         <tbody>
             <?php foreach ($employees as $emp): ?>
             <tr>
+                <td>
+                    <?php if ($emp->avatar): ?>
+                        <img src="<?= $emp->avatar ?>" class="employee-photo">
+                    <?php else: ?>
+                        <div style="width:50px; height:50px; background:#eee; border-radius:50%; text-align:center; line-height:50px; font-size:10px; color:#999;">Нет фото</div>
+                    <?php endif; ?>
+                </td>
                 <td><?= $emp->last_name ?> <?= $emp->first_name ?></td>
                 <td><?= $emp->position ?></td>
-                <td><?= $emp->employee_type ?></td>
+                <td><?= $emp->department->name ?? 'Не указано' ?></td>
             </tr>
             <?php endforeach; ?>
-            <?php if (empty($employees)): ?>
-            <tr>
-                <td colspan="3" style="text-align: center; color: #777; padding: 20px;">Сотрудники пока не добавлены</td>
-            </tr>
-            <?php endif; ?>
         </tbody>
     </table>
 </div>

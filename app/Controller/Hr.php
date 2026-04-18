@@ -19,20 +19,61 @@ class Hr
         return (new View())->render('hr.departments', ['departments' => $departments]);
     }
 
-    public function employees(Request $request): string
-    {
-        if ($request->method === 'POST') {
-            Employee::create($request->all());
+    public function employees(\Src\Request $request): string
+{
+    $search = $request->get('search') ?? '';
+    $query = \Model\Employee::query();
+    
+    if (!empty($search)) {
+        $query->where('last_name', 'like', "%$search%");
+    }
+    
+    $employees = $query->get();
+    $departments = \Model\Department::all();
+
+    if ($request->method === 'POST') {
+        $validator = new \Src\Validator\Validator($request->all(), [
+            'last_name' => ['required', 'name'],
+            'first_name' => ['required', 'name'],
+            'birth_date' => ['required']
+        ], [
+            'required' => 'Поле :field обязательно',
+            'name' => 'В поле :field нельзя использовать цифры'
+        ]);
+
+        if ($validator->fails()) {
+            return new \Src\View('hr.employees', [
+                'employees' => $employees,
+                'departments' => $departments,
+                'message' => json_encode($validator->errors(), JSON_UNESCAPED_UNICODE),
+                'search' => $search
+            ]);
+        }
+
+        $data = $request->all();
+
+        if (!empty($request->files()['avatar']['name'])) {
+            $file = $request->files()['avatar'];
+            $extension = pathinfo($file['name'], PATHINFO_EXTENSION);
+            $filename = uniqid() . '.' . $extension;
+            $targetPath = $_SERVER['DOCUMENT_ROOT'] . '/pop-it-mvc/public/uploads/' . $filename;
+            
+            if (move_uploaded_file($file['tmp_name'], $targetPath)) {
+                $data['avatar'] = '/pop-it-mvc/public/uploads/' . $filename;
+            }
+        }
+
+        if (\Model\Employee::create($data)) {
             app()->route->redirect('/hr/employees');
         }
-        
-        $employees = Employee::all();
-        $departments = Department::all();
-        return (new View())->render('hr.employees', [
-            'employees' => $employees,
-            'departments' => $departments
-        ]);
     }
+
+    return new \Src\View('hr.employees', [
+        'employees' => $employees,
+        'departments' => $departments,
+        'search' => $search
+    ]);
+}
 
     public function reports(Request $request): string
     {

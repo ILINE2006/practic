@@ -21,6 +21,7 @@ class Employee extends Model
         'position',
         'employee_type',
         'department_id',
-        'user_id'
+        'user_id',
+        'avatar'
     ];
 }
