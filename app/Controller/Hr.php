@@ -20,72 +20,71 @@ class Hr
     }
 
     public function employees(\Src\Request $request): string
-{
-    $search = $request->get('search') ?? '';
-    $query = \Model\Employee::query();
-    
-    if (!empty($search)) {
-        $query->where('last_name', 'like', "%$search%");
-    }
-    
-    $employees = $query->get();
-    $departments = \Model\Department::all();
+    {
+        $search = $request->get('search') ?? '';
+        $query = \Model\Employee::query();
+        
+        if (!empty($search)) {
+            $query->where('last_name', 'like', "%$search%");
+        }
+        
+        $employees = $query->get();
+        $departments = \Model\Department::all();
 
 
-    if ($request->method === 'POST') {
+        if ($request->method === 'POST') {
 
-        $validator = new \Src\Validator\Validator($request->all(), [
-            'last_name' => ['required', 'name'],
-            'first_name' => ['required', 'name'],
-            'birth_date' => ['required']
-        ], [
-            'required' => 'Поле :field обязательно',
-            'name' => 'В поле :field нельзя использовать цифры'
-        ]);
-
-        if ($validator->fails()) {
-            return new \Src\View('hr.employees', [
-                'employees' => $employees,
-                'departments' => $departments,
-                'message' => json_encode($validator->errors(), JSON_UNESCAPED_UNICODE),
-                'search' => $search
+            $validator = new \Src\Validator\Validator($request->all(), [
+                'last_name' => ['required', 'name'],
+                'first_name' => ['required', 'name'],
+                'birth_date' => ['required']
+            ], [
+                'required' => 'Поле :field обязательно',
+                'name' => 'В поле :field нельзя использовать цифры'
             ]);
-        }
 
-        $data = $request->all();
-        
-        unset($data['avatar']);
-
-        $file = $request->files()['avatar'] ?? null;
-        if ($file && $file['error'] === UPLOAD_ERR_OK) {
-            
-            $uploadDir = __DIR__ . '/../../public/uploads/';
-            
-            if (!is_dir($uploadDir)) {
-                mkdir($uploadDir, 0777, true);
+            if ($validator->fails()) {
+                return new \Src\View('hr.employees', [
+                    'employees' => $employees,
+                    'departments' => $departments,
+                    'message' => json_encode($validator->errors(), JSON_UNESCAPED_UNICODE),
+                    'search' => $search
+                ]);
             }
 
-            $extension = pathinfo($file['name'], PATHINFO_EXTENSION);
-            $filename = uniqid() . '.' . $extension;
-            $targetPath = $uploadDir . $filename;
+            $data = $request->all();
             
-            if (move_uploaded_file($file['tmp_name'], $targetPath)) {
-                $data['avatar'] = '/pop-it-mvc/public/uploads/' . $filename;
+            unset($data['avatar']);
+
+            $file = $request->files()['avatar'] ?? null;
+            if ($file && $file['error'] === UPLOAD_ERR_OK) {
+                
+                $uploadDir = __DIR__ . '/../../public/uploads/';
+                
+                if (!is_dir($uploadDir)) {
+                    mkdir($uploadDir, 0777, true);
+                }
+
+                $extension = pathinfo($file['name'], PATHINFO_EXTENSION);
+                $filename = uniqid() . '.' . $extension;
+                $targetPath = $uploadDir . $filename;
+                
+                if (move_uploaded_file($file['tmp_name'], $targetPath)) {
+                    $data['avatar'] = '/pop-it-mvc/public/uploads/' . $filename;
+                }
+            }
+            
+            if (\Model\Employee::create($data)) {
+                app()->route->redirect('/hr/employees');
             }
         }
 
-        
-        if (\Model\Employee::create($data)) {
-            app()->route->redirect('/hr/employees');
-        }
+        return new \Src\View('hr.employees', [
+            'employees' => $employees,
+            'departments' => $departments,
+            'search' => $search
+        ]);
     }
-
-    return new \Src\View('hr.employees', [
-        'employees' => $employees,
-        'departments' => $departments,
-        'search' => $search
-    ]);
-}
 
     public function reports(Request $request): string
     {
@@ -102,20 +101,20 @@ class Hr
 
         $employees = $query->get();
         $departments = Department::all();
-
-
+        $empCollection = \Collect\collection($employees->toArray());
+        
         $averageAge = 0;
-        if (count($employees) > 0) {
+        
+        if ($empCollection->count() > 0) {
             $totalAge = 0;
-            foreach ($employees as $emp) {
-
-                $age = date_diff(date_create($emp->birth_date), date_create('today'))->y;
+            
+            $empCollection->each(function ($emp) use (&$totalAge) {
+                $age = date_diff(date_create($emp['birth_date']), date_create('today'))->y;
                 $totalAge += $age;
-            }
+            });
 
-            $averageAge = round($totalAge / count($employees), 1);
+            $averageAge = round($totalAge / $empCollection->count(), 1);
         }
-
 
         return (new View())->render('hr.reports', [
             'employees' => $employees,
