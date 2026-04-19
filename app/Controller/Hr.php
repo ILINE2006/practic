@@ -76,6 +76,7 @@ class Hr
             
             if (\Model\Employee::create($data)) {
                 app()->route->redirect('/hr/employees');
+                return '';
             }
         }
 
