@@ -24,11 +24,11 @@ class Site
     }
    
 
-    public function signup(Request $request): string
+    public function signup(\Src\Request $request): string
     {
         if ($request->method === 'POST') {
             
-            $validator = new Validator($request->all(), [
+            $validator = new \Src\Validator\Validator($request->all(), [
                 'name' => ['required'],
                 'login' => ['required', 'unique:users,login'],
                 'password'=> ['required']
@@ -38,32 +38,32 @@ class Site
             ]);
     
             if($validator->fails()){
-                return new View('site.signup',
+                return new \Src\View('site.signup',
                     ['message'=> json_encode($validator->errors(), JSON_UNESCAPED_UNICODE)]);
             }
     
             $data = $request->all();
             $data['role'] = 'user'; 
     
-
             if (\Model\User::create($data)) {
                 app()->route->redirect('/login');
+                return ''; 
             }
         }
         
-        return new View('site.signup');
+        return new \Src\View('site.signup');
     }
-   
-   public function login(Request $request): string
-{
-   if ($request->method === 'GET') {
-       return new View('site.login');
-   }
-   if (Auth::attempt($request->all())) {
-       app()->route->redirect('/hello');
-   }
-   return new View('site.login', ['message' => 'Неправильные логин или пароль']);
-}
+    public function login(Request $request): string
+    {
+       if ($request->method === 'GET') {
+           return new View('site.login');
+       }
+       if (Auth::attempt($request->all())) {
+           app()->route->redirect('/hello');
+           return ''; 
+       }
+       return new View('site.login', ['message' => 'Неправильные логин или пароль']);
+    }
 
 public function logout(): void
 {
