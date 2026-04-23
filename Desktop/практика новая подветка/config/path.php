@@ -2,5 +2,9 @@
 return [
     'root'  =>  '',
     'routes'  =>  'routes',
-    'views'  =>  'views'
+    'views'  =>  'views',
+    'classes' => [
+        'app',
+        'core'
+    ]
 ];
