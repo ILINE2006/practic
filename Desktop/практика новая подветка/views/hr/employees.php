@@ -133,16 +133,6 @@
                     <?php endforeach; ?>
                 </select>
             </div>
-            <div class="form-group">
-                <label>Учетная запись</label>
-                <select name="user_id" class="form-control">
-                    <option value="">Нет (создать профиль без доступа)</option>
-                    <?php foreach ($users as $u): ?>
-                        <option value="<?= $u->id ?>"><?= $u->login ?></option>
-                    <?php endforeach; ?>
-                </select>
-            </div>
-            
             <hr class="full-width" style="border:0; border-top: 1px dashed #ddd; margin: 10px 0;">
 
             <div class="form-group" style="grid-column: span 2;">
